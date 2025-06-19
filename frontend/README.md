@@ -1,12 +1,75 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+---
 
-Currently, two official plugins are available:
+## ✅ `frontend/README.md` – React + Vite
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```markdown
+# 🎨 BaniyaMart Frontend – React + Vite
+```
 
-## Expanding the ESLint configuration
+This is the **frontend** of the BaniyaMart grocery store app, built with modern tools to offer a smooth and fast user experience.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🚀 Tech Stack
+
+| Layer     | Technology           |
+|-----------|----------------------|
+| Framework | React (via Vite)     |
+| Styling   | Tailwind CSS         |
+| Routing   | React Router DOM     |
+| State     | useState, useEffect  |
+| API Calls | Axios (or Fetch)     |
+
+---
+
+## ✨ Features
+
+- Product list with images, names, and prices
+- Responsive UI
+- API integration with Spring Boot
+- Clean folder structure for scaling
+
+---
+
+## 🔧 Setup Instructions
+
+### 1. 📁 Open `frontend/` directory
+```bash
+cd frontend
+```
+
+### 2. 📦 Install dependencies
+```bash
+npm install
+```
+
+### 3. ▶️ Start development server
+```bash
+npm run dev
+```
+Then open in your browser:
+```bash
+http://localhost:5173
+```
+
+🔗 Backend API Integration
+By default, the frontend will expect the backend to run at:
+```bash
+http://localhost:8080
+```
+
+Make sure:
+1. Backend is running
+2. CORS is enabled
+3. You’re calling correct endpoints (e.g., /products)
+
+
+🧱 Project Structure
+frontend/
+├── public/            # Static files
+├── src/
+│   ├── components/    # Reusable components
+│   ├── pages/         # Page-level components
+│   ├── services/      # API functions
+│   └── App.jsx        # Root component
