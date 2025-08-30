@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baniyamart.backend.model.Product;
@@ -52,14 +53,20 @@ public class ProductController {
 
     // Get products by category
     @GetMapping("/category/{categoryId}")
-    public ResponseEntity<List<Product>> getProductbyCategory(@PathVariable String categoryId){
+    public ResponseEntity<List<Product>> getProductByCategory(@PathVariable String categoryId){
         return ResponseEntity.ok(productService.getProductsByCategory(categoryId)); 
     }
 
     // Get featured products
     @GetMapping("/featured")
     public ResponseEntity<List<Product>> getFeaturedProducts(){
-        return ResponseEntity.ok(productService.getFeatureProducts());
+        return ResponseEntity.ok(productService.getFeaturedProducts());
+    }
+
+    // Search a product
+    @GetMapping("/search")
+    public ResponseEntity<List<Product>> searchProducts(@RequestParam String keyword){
+        return ResponseEntity.ok(productService.searchProducts(keyword));
     }
 
     // Update a product

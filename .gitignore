@@ -12,11 +12,13 @@
 /.classpath
 /.project
 /.settings/
+node_modules/
 
 # Maven specific
 /backend/.mvn/
 backend/mvnw
 backend/mvnw.cmd
+backend/node_modules/
 
 # === FRONTEND (React - Vite) ====
 /frontend/node_modules/

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>BaniyaMart Database Cleaner</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      .status {
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 4px;
+      }
+      .success {
+        background: #d4edda;
+        color: #155724;
+      }
+      .error {
+        background: #f8d7da;
+        color: #721c24;
+      }
+      .warning {
+        background: #fff3cd;
+        color: #856404;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        margin: 10px;
+        background: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 4px;
+      }
+      button:hover {
+        background: #c82333;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🗑️ BaniyaMart Database Cleaner</h1>
+    <p>
+      <strong style="color: red">WARNING:</strong> This will delete ALL your
+      categories and products!
+    </p>
+
+    <button onclick="cleanDatabase()">🚨 Delete All Data</button>
+    <button onclick="clearLogs()">Clear Logs</button>
+
+    <div id="logs"></div>
+
+    <script>
+      const API_BASE = "http://localhost:8080/api";
+
+      function log(message, type = "info") {
+        const logs = document.getElementById("logs");
+        const div = document.createElement("div");
+        div.className = `status ${type}`;
+        div.innerHTML = `${new Date().toLocaleTimeString()}: ${message}`;
+        logs.appendChild(div);
+        console.log(message);
+      }
+
+      function clearLogs() {
+        document.getElementById("logs").innerHTML = "";
+      }
+
+      async function cleanDatabase() {
+        const confirmed = confirm(
+          "⚠️ Are you sure you want to delete ALL categories and products? This cannot be undone!"
+        );
+        if (!confirmed) {
+          log("❌ Operation cancelled by user", "warning");
+          return;
+        }
+
+        log("🚀 Starting database cleanup...");
+
+        try {
+          // Get all products first
+          log("📋 Fetching all products...");
+          const productsResponse = await fetch(`${API_BASE}/products`);
+          const products = await productsResponse.json();
+
+          // Delete all products
+          log(`🗑️ Deleting ${products.length} products...`);
+          for (const product of products) {
+            try {
+              const deleteResponse = await fetch(
+                `${API_BASE}/products/${product.id}`,
+                {
+                  method: "DELETE",
+                }
+              );
+              if (deleteResponse.ok) {
+                log(`✅ Deleted product: ${product.name}`, "success");
+              } else {
+                log(`❌ Failed to delete product: ${product.name}`, "error");
+              }
+            } catch (error) {
+              log(
+                `❌ Error deleting product ${product.name}: ${error.message}`,
+                "error"
+              );
+            }
+            await new Promise((resolve) => setTimeout(resolve, 50)); // Small delay
+          }
+
+          // Get all categories
+          log("📋 Fetching all categories...");
+          const categoriesResponse = await fetch(`${API_BASE}/categories`);
+          const categories = await categoriesResponse.json();
+
+          // Delete all categories
+          log(`🗑️ Deleting ${categories.length} categories...`);
+          for (const category of categories) {
+            try {
+              const deleteResponse = await fetch(
+                `${API_BASE}/categories/${category.id}`,
+                {
+                  method: "DELETE",
+                }
+              );
+              if (deleteResponse.ok) {
+                log(
+                  `✅ Deleted category: ${category.icon} ${category.name}`,
+                  "success"
+                );
+              } else {
+                log(`❌ Failed to delete category: ${category.name}`, "error");
+              }
+            } catch (error) {
+              log(
+                `❌ Error deleting category ${category.name}: ${error.message}`,
+                "error"
+              );
+            }
+            await new Promise((resolve) => setTimeout(resolve, 50)); // Small delay
+          }
+
+          log("🎉 Database cleanup completed!", "success");
+          log(
+            "✅ Your database is now empty and ready for fresh seeding!",
+            "success"
+          );
+          log("🚀 You can now run your data-seeder.html again!", "success");
+        } catch (error) {
+          log(`❌ Error during cleanup: ${error.message}`, "error");
+        }
+      }
+    </script>
+  </body>
+</html>

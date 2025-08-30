@@ -14,14 +14,14 @@ public class OrderItem {
     private String productId;
     private String productName;
     private int quantity;
-    private BigDecimal pricePerUnit;
+    private BigDecimal price;
     private BigDecimal totalPrice;
 
-    public OrderItem(String productId, String productName, int quantity, BigDecimal pricePerUnit) {
+    public OrderItem(String productId, String productName, int quantity, BigDecimal price) {
         this.productId = productId;
         this.productName = productName;
         this.quantity = quantity;
-        this.pricePerUnit = pricePerUnit;
-        this.totalPrice = pricePerUnit.multiply(BigDecimal.valueOf(quantity));
+        this.price = price;
+        this.totalPrice = price.multiply(BigDecimal.valueOf(quantity));
     }
 }

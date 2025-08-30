@@ -32,6 +32,16 @@ public class Order {
     private List<OrderItem> items;
     private BigDecimal totalAmount;
     private OrderStatus Status;
+
+    private String paymentMethod; // e.g., "cod", "paypal", "stripe"
+
+    private String customerName;
+    private String customerEmail;
+    private String customerPhone;
+    private String customerAddress;
+    private String customerCity;
+    private String customerPincode;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

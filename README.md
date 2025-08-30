@@ -7,11 +7,11 @@ Built during my freelance journey, this project helps local businesses offer onl
 
 ## 🚀 Tech Stack
 
-| Layer     | Tech                       |
-|-----------|----------------------------|
-| Frontend  | React + Vite + Tailwind CSS |
-| Backend   | Spring Boot (Java 17)      |
-| Database  | MongoDB Atlas (Cloud DB)   |
+| Layer    | Tech                        |
+| -------- | --------------------------- |
+| Frontend | React + Vite + Tailwind CSS |
+| Backend  | Spring Boot (Java 17)       |
+| Database | MongoDB Atlas (Cloud DB)    |
 
 ---
 
@@ -21,7 +21,6 @@ baniyamart/
 ├── backend/ # Spring Boot API
 ├── frontend/ # React frontend (Vite)
 └── README.md # You’re here 😎
-
 
 ---
 
@@ -43,7 +42,8 @@ baniyamart/
 1. **Clone the Repo**
    ```bash
    git clone https://github.com/Tushar1296/baniyamart.git
+   ```
 2. Run Backend
-    Follow instructions in backend/README.md
+   Follow instructions in backend/README.md
 3. Run Frontend
-    Follow instructions in frontend/README.md
+   Follow instructions in frontend/README.md

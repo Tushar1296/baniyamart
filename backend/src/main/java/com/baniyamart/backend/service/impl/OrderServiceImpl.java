@@ -12,18 +12,26 @@ import org.springframework.stereotype.Service;
 import com.baniyamart.backend.exception.InvalidOrderStatusException;
 import com.baniyamart.backend.exception.OrderNotFoundException;
 import com.baniyamart.backend.model.Order;
+import com.baniyamart.backend.model.OrderItem;
 import com.baniyamart.backend.model.enums.OrderStatus;
 import com.baniyamart.backend.repository.OrderRepository;
+import com.baniyamart.backend.service.EmailService;
 import com.baniyamart.backend.service.OrderService;
+import com.baniyamart.backend.service.PaymentProvider;
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
+    private final PaymentProviderFactory paymentProviderFactory;
     private final OrderRepository orderRepository;
+    private final EmailService emailService;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, EmailService emailService,
+            PaymentProviderFactory paymentProviderFactory) {
         this.orderRepository = orderRepository;
+        this.emailService = emailService;
+        this.paymentProviderFactory = paymentProviderFactory;
     }
 
     @Override
@@ -33,14 +41,33 @@ public class OrderServiceImpl implements OrderService {
         order.setUpdatedAt(LocalDateTime.now());
         order.setStatus(OrderStatus.PENDING);
 
-        // Calculate total amount
-        BigDecimal total = order.getItems().stream()
-                .map(item -> item.getTotalPrice())
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal cartTotal = BigDecimal.ZERO;
 
-        order.setTotalAmount(total);
+        System.out.println("🔍 Calculating total for " + order.getItems().size() + " items");
 
-        return orderRepository.save(order);
+        for (OrderItem item : order.getItems()) {
+            cartTotal = cartTotal.add(item.getTotalPrice());
+            System.out.println(
+                    "   - " + item.getProductName() + " x" + item.getQuantity() + " = " + item.getTotalPrice());
+        }
+        BigDecimal deliveryFee = cartTotal.compareTo(BigDecimal.valueOf(199)) > 0 ? BigDecimal.ZERO
+                : BigDecimal.valueOf(50);
+        order.setTotalAmount(cartTotal.add(deliveryFee));
+        System.out.println("💰 Total amount for order " + order.getId() + " is " + order.getTotalAmount());
+        Order savedOrder = orderRepository.save(order);
+
+        // Process payment
+        if (!"cod".equalsIgnoreCase(order.getPaymentMethod())) {
+            PaymentProvider paymentProvider = paymentProviderFactory.getPaymentProvider(order.getPaymentMethod());
+            paymentProvider.acceptPayment();
+        }
+
+        // Send email with correct total
+        if (savedOrder.getCustomerEmail() != null) {
+            emailService.sendOrderConfirmation(savedOrder);
+        }
+
+        return savedOrder;
     }
 
     @Override

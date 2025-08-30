@@ -49,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getFeatureProducts() {
+    public List<Product> getFeaturedProducts() {
         return productRepository.findByFeaturedTrue();
     }
 
@@ -80,6 +80,11 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductNotFoundException("Product not found with ID: " + id);
         }
         productRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Product> searchProducts(String keyword) {
+        return productRepository.findByNameContainingIgnoreCase(keyword);
     }
 
 }
